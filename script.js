@@ -50,7 +50,7 @@ let loadingAnimation = () => {
     },
   })
   tl.from('.hero h1', {
-    y: 130,
+    y: '100%',
     stagger: 0.1,
     delay: -0.5,
   })
@@ -68,7 +68,7 @@ let curserMove = () => {
       duration: 0.05,
     })
   })
-  let h3 = document.querySelectorAll('.nav-part2 h3')
+  let h3 = document.querySelectorAll('.nav-part2 h3, .toggleBar')
   h3.forEach((elem) => {
     elem.addEventListener('mouseenter', () => {
       gsap.to('#crsr', {
@@ -84,9 +84,73 @@ let curserMove = () => {
     })
   })
 
-  Shery.makeMagnet('.nav-part2 h3', {
+  Shery.makeMagnet('.nav-part2 h3, .toggleBar', {
     duration: 2,
   })
 }
-loadingAnimation()
+let scrollEffects = () => {
+  gsap.registerPlugin(ScrollTrigger)
+
+  gsap.to('.video-container', {
+    scrollTrigger: {
+      trigger: '.page2',
+      start: 'top bottom',
+      end: '100% center',
+      scrub: 1,
+    },
+    y: '40%',
+    ease: 'power1.in',
+  })
+  gsap.to('.btn', {
+    scrollTrigger: {
+      trigger: '.page2',
+      start: 'top bottom',
+      end: '80% center',
+      scrub: 1,
+    },
+    y: '35%',
+    ease: 'power1.in',
+  })
+}
+let btnMove = () => {
+  let videoContainer = document.querySelector('.video-container')
+  let btn = document.querySelector('.btn')
+
+  videoContainer.addEventListener('mousemove', (dets) => {
+    const containerRect = videoContainer.getBoundingClientRect()
+    const mouseX = dets.clientX - containerRect.left
+    const mouseY = dets.clientY - containerRect.top
+
+    gsap.to(btn, {
+      top: mouseY,
+      left: mouseX,
+      transform: ' translate(-50%, -50%)',
+      duration: 0.5,
+      ease: 'power1.out',
+    })
+  })
+  videoContainer.addEventListener('mouseleave', (dets) => {
+    gsap.to(btn, {
+      top: '-22%',
+      left: '74%',
+      transform: ' translate(0)',
+      duration: 0.6,
+      ease: 'power1.out',
+    })
+  })
+}
+
+gsap.to('.nav-part2', {
+  scrollTrigger: {
+    trigger: 'header',
+    start: 'top 7%',
+    end: 'top 7%',
+    scrub: 1,
+  },
+  y: -35,
+  opacity: 0,
+})
+// loadingAnimation()
 curserMove()
+scrollEffects()
+btnMove()
